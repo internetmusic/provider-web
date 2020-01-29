@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { fetchByAlias } from '@waves/node-api-js/es/api-node/alias';
 import { fetchDetails } from '@waves/node-api-js/es/api-node/assets';
 import { TFeeInfo } from '@waves/node-api-js/es/api-node/transactions';
@@ -115,7 +116,7 @@ export const prepareTransactions = (
         }))
     );
 };
-
+window._prep = prepareTransactions;
 export interface IMeta<T extends TTransactionParamWithType> {
     feeList: Array<TFeeInfo>;
     aliases: Record<string, string>;

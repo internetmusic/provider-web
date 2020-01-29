@@ -24,8 +24,10 @@ import omit from 'ramda/es/omit';
 import { SignTransfer } from '../pages/SignTransfer/SignTransferContainer';
 import { SignInvoke } from '../pages/SignInvoke/SignInvokeContainer';
 import { SignDataContainer } from '../pages/SignData/SignDataContainer';
+import { SignIssueContainer } from '../pages/SignIssue/SignIssueContainer';
 
 const getPageByType = (type: keyof TRANSACTION_TYPE_MAP): ReactNode => {
+    console.log(type);
     switch (type) {
         case NAME_MAP.transfer:
             return SignTransfer;
@@ -33,6 +35,8 @@ const getPageByType = (type: keyof TRANSACTION_TYPE_MAP): ReactNode => {
             return SignInvoke;
         case NAME_MAP.data:
             return SignDataContainer;
+        case NAME_MAP.issue:
+            return SignIssueContainer;
         case NAME_MAP.exchange:
             throw new Error('Unsupported type!'); // TODO
         case NAME_MAP.lease:
@@ -58,12 +62,16 @@ export default function(
     list: Array<TTransactionParamWithType>,
     state: IState<IUserWithBalances>
 ): Promise<Array<TTransactionWithProofs<TLong> & IWithId>> {
+    // console.log({ state, list });
+
     return prepareTransactions(state, list).then((transactions) => {
         if (transactions.length !== 1) {
             return batch(transactions, state);
         }
 
         const [info] = transactions;
+
+        console.log({ info });
 
         return new Promise((resolve, reject) => {
             renderPage(

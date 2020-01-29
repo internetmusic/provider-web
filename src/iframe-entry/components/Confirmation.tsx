@@ -13,12 +13,14 @@ type IConfirmationProps = TFlexProps & {
     address: string;
     name: string;
     balance: string;
+    canConfirm?: boolean;
     onReject: MouseEventHandler<HTMLButtonElement>;
     onConfirm: MouseEventHandler<HTMLButtonElement>;
 };
 
 export const Confirmation: FC<IConfirmationProps> = ({
     address,
+    canConfirm,
     name,
     balance,
     children,
@@ -26,6 +28,9 @@ export const Confirmation: FC<IConfirmationProps> = ({
     onConfirm,
     ...rest
 }) => {
+    const isConfirmDisabled =
+        typeof canConfirm === 'undefined' ? false : canConfirm;
+
     return (
         <Flex
             backgroundColor="main.$800"
@@ -84,6 +89,7 @@ export const Confirmation: FC<IConfirmationProps> = ({
                     flexGrow={1}
                     variant="primary"
                     variantSize="medium"
+                    disabled={isConfirmDisabled}
                     onClick={onConfirm}
                 >
                     Confirm

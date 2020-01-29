@@ -178,5 +178,21 @@
                 Logout
             </button>
         </div>
+
+        <div>
+            <h2>
+                Sign Issue
+            </h2>
+            <button onclick="waves.issue({
+                name: 'Name of Token',
+                decimals: 2,
+                quantity: 1000,
+                reissuable: false,
+                description: 'Description of token',
+                script: undefined
+            }).broadcast()">
+                Sign Issue
+            </button>
+        </div>
     </body>
 </html>
