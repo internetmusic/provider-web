@@ -13,19 +13,20 @@ import {
     Select,
     Selected,
     List,
+    AddressAvatar,
 } from '@waves.exchange/react-uikit';
 import { ICall, TLong, IInvokeWithType } from '@waves/signer';
 import { IInvokeScriptTransaction, IWithId } from '@waves/ts-types';
 import React, { FC, MouseEventHandler, ReactElement } from 'react';
 import { Confirmation } from '../../components/Confirmation';
 import { InvokeFunction } from '../../components/InvokeFunction/InvokeFunction';
-import { Account } from '../../components/Account';
 import { InvokePayment } from '../../components/InvokePayment/InvokePayment';
 import { TransactionDetails } from '../../components/TransactionDetails/TransactionDetails';
 import { TransactionJson } from '../../components/TransactionJson/TransactionJson';
 import { IPayment } from './SignInvokeContainer';
 import { FeeOption } from '@waves.exchange/react-uikit';
 import { IMeta } from '../../services/transactionsService';
+import { FeeSelect, FeeSelectHandler } from '../../components/FeeList/FeeList';
 
 export interface IProps {
     userAddress: string;
@@ -44,6 +45,7 @@ export interface IProps {
     onFeeSelect: (option: FeeOption) => void;
     onCancel: MouseEventHandler<HTMLButtonElement>;
     onConfirm: MouseEventHandler<HTMLButtonElement>;
+    handleFeeSelect: FeeSelectHandler;
 }
 
 export const SignInvoke: FC<IProps> = ({
@@ -60,7 +62,7 @@ export const SignInvoke: FC<IProps> = ({
     onConfirm,
     feeList,
     selectedFee,
-    onFeeSelect,
+    handleFeeSelect,
 }) => (
     <Confirmation
         address={userAddress}
@@ -137,10 +139,11 @@ export const SignInvoke: FC<IProps> = ({
                                 >
                                     Account
                                 </Text>
-                                <Account
+                                <AddressAvatar
                                     address={dAppAddress}
-                                    userName={userName}
+                                    name={userName}
                                     alias={dAppName}
+                                    addressWithCopy={true}
                                 />
                             </Box>
 
@@ -181,7 +184,7 @@ export const SignInvoke: FC<IProps> = ({
                                 </Box>
                             )}
 
-                            <Box mb="$20">
+                            <Box>
                                 <Text
                                     variant="body2"
                                     color="basic.$500"
@@ -202,31 +205,14 @@ export const SignInvoke: FC<IProps> = ({
                                 />
                             </Box>
 
-                            <Box>
-                                <Text
-                                    variant="body2"
-                                    color="basic.$500"
-                                    as="div"
-                                >
-                                    Fee
-                                </Text>
-                                <Select
-                                    isDisabled={meta.feeList.length === 0}
-                                    placement="top"
-                                    renderSelected={(open): ReactElement => (
-                                        <Selected
-                                            selected={selectedFee}
-                                            opened={open}
-                                        />
-                                    )}
-                                >
-                                    <List
-                                        onSelect={onFeeSelect}
-                                        options={feeList}
-                                        css={{ bottom: 56 }}
-                                    ></List>
-                                </Select>
-                            </Box>
+                            <FeeSelect
+                                mt="$20"
+                                txMeta={meta}
+                                fee={tx.fee}
+                                feeAssetId={tx.feeAssetId}
+                                onFeeSelect={handleFeeSelect}
+                                isDisabled={meta.feeList.length === 0}
+                            />
                         </TabPanel>
                         <TabPanel>
                             <TransactionDetails tx={tx} />

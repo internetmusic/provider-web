@@ -14,6 +14,7 @@ export const SignIssueContainer: FC<ISignTxProps<IIssueWithType>> = ({
     onConfirm,
 }) => {
     const { userName, userBalance } = useTxUser(user, networkByte);
+
     const { handleReject, handleConfirm } = useTxHandlers(
         tx,
         onCancel,

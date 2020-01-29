@@ -4,6 +4,7 @@ import React, {
     useState,
     useCallback,
     useEffect,
+    ReactElement,
 } from 'react';
 import { Confirmation } from '../../components/Confirmation';
 import {
@@ -19,7 +20,11 @@ import {
     AddressAvatar,
     Box,
     Checkbox,
+    Select,
+    Selected,
+    List,
     Label,
+    FeeOption,
 } from '@waves.exchange/react-uikit';
 import { Help } from '../../components/Help/Help';
 

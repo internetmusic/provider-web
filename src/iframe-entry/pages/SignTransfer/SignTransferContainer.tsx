@@ -14,6 +14,8 @@ import { catchable } from '../../utils/catchable';
 import { isAlias } from '../../utils/isAlias';
 import { getCoins, getPrintableNumber } from '../../utils/math';
 import { SignTransfer as SignTransferComponent } from './SignTransferComponent';
+import { assetPropFactory } from '../../utils/assetPropFactory';
+import { FeeSelectHandler } from '../../components/FeeList/FeeList';
 
 const getAssetName = (
     assets: Record<string, TAssetDetails<TLong>>,
@@ -67,34 +69,12 @@ export const SignTransfer: FC<ISignTxProps<ITransferWithType>> = ({
         ? txMeta.aliases[tx.recipient]
         : tx.recipient;
 
-    const defaultFee: FeeOption = {
-        id: WAVES.assetId,
-        name: WAVES.name,
-        ticker: WAVES.ticker,
-        value: fee,
-    };
-
-    const feeList = [defaultFee].concat(
-        txMeta.feeList.map((f) => ({
-            name: txMeta.assets[f.feeAssetId as string].name,
-            id: String(f.feeAssetId),
-            ticker: '',
-            value: String(f.feeAmount),
-        }))
-    );
-
-    const [selectedFee, setSelectedFee] = useState<FeeOption>(defaultFee);
-
-    const handleFeeSelect = useCallback(
-        (feeOption: FeeOption) => {
-            setSelectedFee(feeOption);
-            tx.feeAssetId = feeOption.id;
-            tx.fee = getCoins(
-                feeOption.value,
-                txMeta.assets[feeOption.id].decimals
-            );
+    const handleFeeSelect = useCallback<FeeSelectHandler>(
+        (fee, feeAssetId) => {
+            tx.fee = fee;
+            tx.feeAssetId = feeAssetId;
         },
-        [tx.fee, tx.feeAssetId, txMeta.assets]
+        [tx.fee, tx.feeAssetId]
     );
 
     return (
@@ -112,12 +92,10 @@ export const SignTransfer: FC<ISignTxProps<ITransferWithType>> = ({
             attachement={attachment.ok ? attachment.resolveData : ''}
             tx={tx}
             meta={txMeta}
-            feeList={feeList}
-            selectedFee={selectedFee}
-            onFeeSelect={handleFeeSelect}
             onReject={handleReject}
             onConfirm={handleConfirm}
             iconType={getIconType(tx, user, Object.keys(txMeta.aliases))}
+            handleFeeSelect={handleFeeSelect}
         />
     );
 };

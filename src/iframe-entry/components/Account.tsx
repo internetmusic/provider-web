@@ -17,11 +17,14 @@ export const Account: FC<Props> = ({ address, userName, alias }) => {
                         {userName}
                     </Text>
                 )}
+                
                 <Copy
                     inititialTooltipLabel="Copy address"
                     copiedTooltipLabel="Copied!"
                     text={alias}
-                />
+                >
+                    {alias}
+                </Copy>
             </Flex>
         </Flex>
     );
