@@ -15,15 +15,11 @@ export const checkIsEnoughBalance = (balance: TLong, fee: TLong): boolean => {
 
 const isFeeAssetId = (
     feeAssetId: string | null | undefined
-): feeAssetId is string | null => {
-    return typeof feeAssetId !== 'undefined';
-};
+): feeAssetId is string | null => typeof feeAssetId !== 'undefined';
 
 const isNonDefaultFeeAssetId = (
     feeAssetId: string | null | undefined
-): feeAssetId is string => {
-    return typeof feeAssetId !== 'string';
-};
+): feeAssetId is string => typeof feeAssetId === 'string';
 
 export const formatFee = (fee: TLong, feeAsset: DetailsWithLogo): string =>
     getPrintableNumber(fee, feeAsset.decimals);
@@ -74,11 +70,7 @@ export const getFeeOptions = (
         value: String(f.feeAmount),
     }));
 
-    const isEnoughBalance = checkIsEnoughBalance(
-        availableWavesBalance,
-        txFee
-        // feeAsset.decimals
-    );
+    const isEnoughBalance = checkIsEnoughBalance(availableWavesBalance, txFee);
     const hasNonDefaultFees = metaFeeOptions.length > 0;
 
     let feeOptions;
